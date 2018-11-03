@@ -50,20 +50,26 @@ export default class WechatAPIProvider extends PureComponent {
 
 	async init() {
 		const { jsApiList, shareData } = this.props;
-		await this.config(jsApiList);
-		await this.updateShareData(shareData);
+		this.config(jsApiList, () => {
+			this.updateShareData(shareData);
+		});
 	}
 
-	config = debounce(async (jsApiList) => {
+	config = debounce(async (jsApiList, callback) => {
 		const {
 			props: { debug, wx, getConfig },
 			wechatAPIContext: { emitter },
 		} = this;
 
+		const done = () => {
+			emitter.emit('ready', wx);
+			if (typeof callback === 'function') callback();
+		};
+
 		if (!isWechat) {
 			if (debug) {
 				this._updateShareApiList(jsApiList);
-				emitter.emit('ready', wx);
+				done();
 			}
 			return;
 		}
@@ -79,9 +85,7 @@ export default class WechatAPIProvider extends PureComponent {
 				jsApiList: apiList,
 				...config,
 			});
-			wx.ready(() => {
-				emitter.emit('ready', wx);
-			});
+			wx.ready(done);
 			wx.error((err) => {
 				emitter.emit('error', err);
 			});
