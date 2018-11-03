@@ -1,4 +1,4 @@
-import React, { PureComponent, Children, cloneElement } from 'react';
+import React, { Children, cloneElement } from 'react';
 import PropTypes from 'prop-types';
 import EventEmitter from 'emit-lite';
 import WechatAPIContext from './WechatAPIContext';
@@ -13,7 +13,9 @@ const shareApiList = [
 	'onMenuShareQZone',
 ];
 
-export default class WechatAPIProvider extends PureComponent {
+const Component = React.PureComponent || React.Component;
+
+export default class WechatAPIProvider extends Component {
 	static propTypes = {
 		wx: PropTypes.object.isRequired,
 		children: PropTypes.node.isRequired,
