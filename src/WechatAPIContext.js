@@ -1,3 +1,3 @@
-import { createContext } from 'react';
+import createContext from 'create-react-context';
 
 export default createContext();
