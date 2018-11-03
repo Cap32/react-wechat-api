@@ -31,7 +31,7 @@ const defaultShareData = {
   imgUrl: `${window.location.origin}/icon.png`
 };
 
-const jsApiList = [
+const defaultJsApiList = [
   "onMenuShareTimeline",
   "onMenuShareAppMessage",
   "onMenuShareQQ",
@@ -48,8 +48,8 @@ export default class App extends Component {
               {...props}
               wx={wx}
               getConfig={getConfig}
-              jsApiList={jsApiList}
-              shareData={shareData}
+              jsApiList={defaultJsApiList}
+              shareData={defaultShareData}
             >
               <Switch>
                 <Route path="/" component={HomePage} />
