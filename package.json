@@ -32,6 +32,7 @@
   "author": "Cap32",
   "license": "MIT",
   "dependencies": {
+    "emit-lite": "^2.0.0",
     "prop-types": "^15.5.7"
   },
   "devDependencies": {

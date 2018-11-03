@@ -1,14 +1,8 @@
 import React, { PureComponent, Children, cloneElement } from 'react';
 import PropTypes from 'prop-types';
-// import routerStore from 'stores/routerStore';
-import wx from 'weixin-js-sdk';
-import { baseReq } from 'utils/requests';
-import { isWechat } from 'utils/env';
-import debounce from 'utils/debounce';
 import EventEmitter from 'emit-lite';
 import WechatAPIContext from './WechatAPIContext';
-
-const url = 'https://wx.bitsdaily.net/api/wechat/jssdk';
+import { isWechat, debounce } from './utils';
 
 const shareApiList = [
 	'updateAppMessageShareData',
@@ -21,8 +15,10 @@ const shareApiList = [
 
 export default class WechatAPIProvider extends PureComponent {
 	static propTypes = {
+		wx: PropTypes.object.isRequired,
 		children: PropTypes.node.isRequired,
 		location: PropTypes.any.isRequired,
+		getConfig: PropTypes.func.isRequired,
 		jsApiList: PropTypes.array,
 		shareData: PropTypes.object,
 		debug: PropTypes.bool,
@@ -60,7 +56,7 @@ export default class WechatAPIProvider extends PureComponent {
 
 	config = debounce(async (jsApiList) => {
 		const {
-			props: { debug },
+			props: { debug, wx, getConfig },
 			wechatAPIContext: { emitter },
 		} = this;
 
@@ -73,9 +69,8 @@ export default class WechatAPIProvider extends PureComponent {
 		}
 
 		try {
-			const config = await baseReq.fetch({
-				url,
-				query: { url: window.location.href.replace(/#.*/, '') },
+			const config = await getConfig({
+				url: window.location.href.replace(/#.*/, ''),
 			});
 			const apiList = [...jsApiList];
 			this._updateShareApiList(apiList);
@@ -101,7 +96,7 @@ export default class WechatAPIProvider extends PureComponent {
 	};
 
 	updateShareData = debounce((shareData) => {
-		const { debug } = this.props;
+		const { debug, wx } = this.props;
 		const data = { ...this.props.shareData, ...shareData };
 		Object.keys(data).forEach((key) => {
 			const val = data[key];
