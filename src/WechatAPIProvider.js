@@ -1,17 +1,9 @@
 import React, { Children, cloneElement } from 'react';
 import PropTypes from 'prop-types';
+import { shareApiList } from './constants';
 import EventEmitter from 'emit-lite';
 import WechatAPIContext from './WechatAPIContext';
 import { isWechat, debounce } from './utils';
-
-const shareApiList = [
-	'updateAppMessageShareData',
-	'updateTimelineShareData',
-	'onMenuShareTimeline',
-	'onMenuShareAppMessage',
-	'onMenuShareQQ',
-	'onMenuShareQZone',
-];
 
 const Component = React.PureComponent || React.Component;
 
