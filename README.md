@@ -23,6 +23,12 @@ import HomePage from "./containers/HomePage";
 
 const getConfig = ({ url }) =>
   fetch(`https://aweso.me/api/wx?url=${url}`).then(res => res.json());
+/* should return an object like {
+  appId: "wx05d8cb9deee3c05c",
+  nonceStr: "nw0y6jnq1ie",
+  signature: "e50d96cb73c09ba1e5848456d1ae90ec1b7ccf43",
+  timestamp: 1541346529448
+} */
 
 const defaultShareData = {
   title: "Wechat API",
