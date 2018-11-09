@@ -12,14 +12,13 @@ $ yarn add react-wechat-api
 
 ##### Example with react-router v4
 
-**App.js**
+**Wechat.js**
 
 ```jsx
-import React, { Component } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import React from "react";
+import { withRouter } from "react-router-dom";
 import { WechatAPIProvider } from "recat-wechat-api";
 import wx from "weixin-js-sdk";
-import HomePage from "./containers/HomePage";
 
 const getConfig = ({ url }) =>
   fetch(`https://aweso.me/api/wx?url=${url}`).then(res => res.json());
@@ -44,26 +43,35 @@ const defaultJsApiList = [
   "onMenuShareQZone"
 ];
 
+export default withRouter(function Wechat(props) {
+  return (
+    <WechatAPIProvider
+      wx={wx}
+      getConfig={getConfig}
+      jsApiList={defaultJsApiList}
+      shareData={defaultShareData}
+      {...props}
+    />
+  );
+});
+```
+
+**App.js**
+
+```jsx
+import React, { Component } from "react";
+import { BrowserRouter, Route } from "react-router-dom";
+import Wechat from "./Wechat";
+import HomePage from "./containers/HomePage";
+
 export default class App extends Component {
   render() {
     return (
       <BrowserRouter>
-        <Route>
-          {props => (
-            <WechatAPIProvider
-              {...props}
-              wx={wx}
-              getConfig={getConfig}
-              jsApiList={defaultJsApiList}
-              shareData={defaultShareData}
-            >
-              <Switch>
-                <Route path="/" component={HomePage} />
-                {/* other routes... */}
-              </Switch>
-            </WechatAPIProvider>
-          )}
-        </Route>
+        <Wechat>
+          <Route path="/" component={HomePage} />
+          {/* other routes... */}
+        </Wechat>
       </BrowserRouter>
     );
   }
