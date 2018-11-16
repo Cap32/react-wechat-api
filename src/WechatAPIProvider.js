@@ -58,8 +58,8 @@ export default class WechatAPIProvider extends Component {
 		} = this;
 
 		const done = () => {
-			emitter.emit('ready', wx);
 			if (typeof callback === 'function') callback();
+			emitter.emit('ready', wx);
 		};
 
 		if (!undocumented_isWechat) {
