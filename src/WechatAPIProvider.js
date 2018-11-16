@@ -18,6 +18,7 @@ export default class WechatAPIProvider extends Component {
 		debug: PropTypes.bool,
 		onSetShareData: PropTypes.func,
 		onSetJsApiList: PropTypes.func,
+		onGetConfigError: PropTypes.func,
 		undocumented_isWechat: PropTypes.bool,
 	};
 
@@ -25,6 +26,8 @@ export default class WechatAPIProvider extends Component {
 		jsApiList: [],
 		shareData: {},
 		debug: false,
+		onGetConfigError: (err) =>
+			console.error('[WechatAPI] Failed to get config', err),
 		undocumented_isWechat: isWechat,
 	};
 
@@ -55,7 +58,14 @@ export default class WechatAPIProvider extends Component {
 
 	config = debounce((jsApiList, callback) => {
 		const {
-			props: { debug, wx, getConfig, onSetJsApiList, undocumented_isWechat },
+			props: {
+				debug,
+				wx,
+				getConfig,
+				onSetJsApiList,
+				onGetConfigError,
+				undocumented_isWechat,
+			},
 			wechatAPIContext: { emitter },
 		} = this;
 
@@ -91,9 +101,7 @@ export default class WechatAPIProvider extends Component {
 				});
 				if (onSetJsApiList) onSetJsApiList(apiList, wx);
 			})
-			.catch((err) => {
-				console.error('INIT WECHAT ERROR', err);
-			});
+			.catch(onGetConfigError);
 	}, 200);
 
 	_updateShareApiList = (apiList) => {
@@ -126,6 +134,7 @@ export default class WechatAPIProvider extends Component {
 			wx,
 			onSetJsApiList,
 			onSetShareData,
+			onGetConfigError,
 			undocumented_isWechat,
 			...other
 		} = this.props;

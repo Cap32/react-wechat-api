@@ -13,6 +13,23 @@ describe('WechatAPIProvider', () => {
 		expect(() => shallow(<WechatAPIProvider />)).toThrow();
 	});
 
+	test('should onGetConfigError work', async () => {
+		const wx = createWx();
+		const onGetConfigError = jest.fn();
+		shallow(
+			<WechatAPIProvider
+				wx={wx}
+				getConfig={() => Promise.reject(new Error())}
+				location="/"
+				onGetConfigError={onGetConfigError}
+				undocumented_isWechat
+			>
+				<div />
+			</WechatAPIProvider>,
+		);
+		await delay(800);
+		expect(onGetConfigError).toHaveBeenCalledTimes(1);
+	});
 	test('should children work', () => {
 		const wx = createWx();
 		const wrapper = mount(
@@ -36,7 +53,7 @@ describe('WechatAPIProvider', () => {
 				<div />
 			</WechatAPIProvider>,
 		);
-		await delay(300);
+		await delay(800);
 		expect(wx._jsApiList).toEqual(['foo']);
 	});
 
@@ -55,7 +72,7 @@ describe('WechatAPIProvider', () => {
 				<div />
 			</WechatAPIProvider>,
 		);
-		await delay(500);
+		await delay(800);
 		expect(onSetJsApiList).toHaveBeenCalledTimes(1);
 		expect(onSetJsApiList).toHaveBeenLastCalledWith(
 			['onMenuShareTimeline'],
@@ -77,7 +94,7 @@ describe('WechatAPIProvider', () => {
 				<div />
 			</WechatAPIProvider>,
 		);
-		await delay(500);
+		await delay(800);
 		expect(wx._onMenuShareTimeline).toEqual({ foo: 'bar' });
 	});
 
@@ -97,7 +114,7 @@ describe('WechatAPIProvider', () => {
 				<div />
 			</WechatAPIProvider>,
 		);
-		await delay(500);
+		await delay(800);
 		expect(onSetShareData).toHaveBeenCalledTimes(1);
 		expect(onSetShareData).toHaveBeenLastCalledWith(
 			{ foo: 'bar' },
@@ -123,7 +140,7 @@ describe('WechatAPI', () => {
 				</WechatAPI>
 			</WechatAPIProvider>,
 		);
-		await delay(500);
+		await delay(800);
 		expect(onReady).toHaveBeenCalledTimes(1);
 	});
 
@@ -144,7 +161,7 @@ describe('WechatAPI', () => {
 				</WechatAPI>
 			</WechatAPIProvider>,
 		);
-		await delay(500);
+		await delay(800);
 		expect(onSetJsApiList).toHaveBeenLastCalledWith(
 			['onMenuShareAppMessage'],
 			wx,
@@ -169,7 +186,7 @@ describe('WechatAPI', () => {
 				</WechatAPI>
 			</WechatAPIProvider>,
 		);
-		await delay(500);
+		await delay(800);
 		expect(onSetShareData).toHaveBeenLastCalledWith(
 			{ foo: 'baz', bar: 'bar', qux: 'qux' },
 			['onMenuShareTimeline'],
@@ -202,9 +219,9 @@ describe('WechatAPI', () => {
 			);
 		};
 		const wrapper = mount(<App location="foo" />);
-		await delay(500);
+		await delay(800);
 		wrapper.setProps({ location: 'bar' });
-		await delay(500);
+		await delay(800);
 		expect(onSetShareData).toHaveBeenLastCalledWith(
 			{ foo: 'foo', bar: 'bar' },
 			['onMenuShareTimeline'],
