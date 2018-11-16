@@ -142,6 +142,7 @@ describe('WechatAPI', () => {
 		);
 		await delay(800);
 		expect(onReady).toHaveBeenCalledTimes(1);
+		expect(onReady).toHaveBeenLastCalledWith(wx);
 	});
 
 	test('should jsApiList work', async () => {
