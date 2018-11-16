@@ -16,6 +16,7 @@ export default class WechatAPIProvider extends Component {
 		jsApiList: PropTypes.array,
 		shareData: PropTypes.object,
 		debug: PropTypes.bool,
+		onSetShareData: PropTypes.func,
 		undocumented_isWechat: PropTypes.bool,
 	};
 
@@ -96,7 +97,7 @@ export default class WechatAPIProvider extends Component {
 	};
 
 	updateShareData = debounce((shareData) => {
-		const { debug, wx } = this.props;
+		const { debug, wx, onSetShareData } = this.props;
 		const data = { ...this.props.shareData, ...shareData };
 		Object.keys(data).forEach((key) => {
 			const val = data[key];
@@ -104,6 +105,7 @@ export default class WechatAPIProvider extends Component {
 		});
 		debug && console.log('wx jssdk share data', data, this.shareApiList);
 		this.shareApiList.forEach((shareType) => wx[shareType](data));
+		if (onSetShareData) onSetShareData(data, this.shareApiList, wx);
 	}, 200);
 
 	resetShareData = () => {
@@ -118,6 +120,7 @@ export default class WechatAPIProvider extends Component {
 			debug,
 			getConfig,
 			wx,
+			onSetShareData,
 			undocumented_isWechat,
 			...other
 		} = this.props;
