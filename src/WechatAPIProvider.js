@@ -46,14 +46,14 @@ export default class WechatAPIProvider extends Component {
 		if (prevProps.location !== location) this.config(jsApiList);
 	}
 
-	async init() {
+	init() {
 		const { jsApiList, shareData } = this.props;
 		this.config(jsApiList, () => {
 			this.updateShareData(shareData);
 		});
 	}
 
-	config = debounce(async (jsApiList, callback) => {
+	config = debounce((jsApiList, callback) => {
 		const {
 			props: { debug, wx, getConfig, onSetJsApiList, undocumented_isWechat },
 			wechatAPIContext: { emitter },
@@ -72,26 +72,28 @@ export default class WechatAPIProvider extends Component {
 			return;
 		}
 
-		try {
-			const config = await getConfig({
-				url: window.location.href.replace(/#.*/, ''),
+		const maybeGetConfigPromise = getConfig({
+			url: window.location.href.replace(/#.*/, ''),
+		});
+
+		Promise.resolve(maybeGetConfigPromise)
+			.then((config) => {
+				const apiList = [...jsApiList];
+				this._updateShareApiList(apiList);
+				wx.config({
+					debug,
+					jsApiList: apiList,
+					...config,
+				});
+				wx.ready(done);
+				wx.error((err) => {
+					emitter.emit('error', err);
+				});
+				if (onSetJsApiList) onSetJsApiList(apiList, wx);
+			})
+			.catch((err) => {
+				console.error('INIT WECHAT ERROR', err);
 			});
-			const apiList = [...jsApiList];
-			this._updateShareApiList(apiList);
-			wx.config({
-				debug,
-				jsApiList: apiList,
-				...config,
-			});
-			wx.ready(done);
-			wx.error((err) => {
-				emitter.emit('error', err);
-			});
-			if (onSetJsApiList) onSetJsApiList(apiList, wx);
-		}
-		catch (err) {
-			console.error('INIT WECHAT ERROR', err);
-		}
 	}, 200);
 
 	_updateShareApiList = (apiList) => {
