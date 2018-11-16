@@ -109,7 +109,15 @@ export default class WechatAPIProvider extends Component {
 	};
 
 	render() {
-		const { children, jsApiList, debug, ...other } = this.props;
+		const {
+			children,
+			jsApiList,
+			shareData,
+			debug,
+			getConfig,
+			wx,
+			...other
+		} = this.props;
 		return (
 			<WechatAPIContext.Provider value={this.wechatAPIContext}>
 				{Children.only(cloneElement(children, other))}
