@@ -1,3 +1,6 @@
 import createContext from 'create-react-context';
 
-export default createContext();
+const Context = createContext();
+Context.displayName = 'WechatAPIContext';
+
+export default Context;
