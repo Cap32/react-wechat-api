@@ -109,13 +109,12 @@ export default class WechatAPIProvider extends Component {
 	};
 
 	updateShareData = debounce((shareData) => {
-		const { debug, wx, onSetShareData } = this.props;
+		const { wx, onSetShareData } = this.props;
 		const data = { ...this.props.shareData, ...shareData };
 		Object.keys(data).forEach((key) => {
 			const val = data[key];
 			if (typeof val === 'function') data[key] = val();
 		});
-		debug && console.log('wx jssdk share data', data, this.shareApiList);
 		this.shareApiList.forEach((shareType) => wx[shareType](data));
 		if (onSetShareData) onSetShareData(data, this.shareApiList, wx);
 	}, 200);
