@@ -1,5 +1,7 @@
 # react-wechat-api
 
+[![Build Status](https://travis-ci.org/Cap32/react-wechat-api.svg?branch=master)](https://travis-ci.org/Cap32/react-wechat-api)
+
 [WIP] React Wechat JSSDK component for SPA
 
 ## Installation
