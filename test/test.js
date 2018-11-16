@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { configure, mount, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
@@ -122,7 +123,7 @@ describe('WechatAPI', () => {
 				</WechatAPI>
 			</WechatAPIProvider>,
 		);
-		await delay(1000);
+		await delay(500);
 		expect(onReady).toHaveBeenCalledTimes(1);
 	});
 
@@ -143,7 +144,7 @@ describe('WechatAPI', () => {
 				</WechatAPI>
 			</WechatAPIProvider>,
 		);
-		await delay(1000);
+		await delay(500);
 		expect(onSetJsApiList).toHaveBeenLastCalledWith(
 			['onMenuShareAppMessage'],
 			wx,
@@ -168,9 +169,44 @@ describe('WechatAPI', () => {
 				</WechatAPI>
 			</WechatAPIProvider>,
 		);
-		await delay(1000);
+		await delay(500);
 		expect(onSetShareData).toHaveBeenLastCalledWith(
 			{ foo: 'baz', bar: 'bar', qux: 'qux' },
+			['onMenuShareTimeline'],
+			wx,
+		);
+	});
+
+	test('should reset shareData after children unmount', async () => {
+		const wx = createWx();
+		const onSetShareData = jest.fn();
+		const App = function App({ location }) {
+			return (
+				<WechatAPIProvider
+					wx={wx}
+					getConfig={() => {}}
+					location={location}
+					jsApiList={['onMenuShareTimeline']}
+					shareData={{ foo: 'foo', bar: 'bar' }}
+					onSetShareData={onSetShareData}
+					undocumented_isWechat
+				>
+					{location === 'foo' ? (
+						<WechatAPI shareData={{ foo: 'baz', qux: 'qux' }}>
+							<div />
+						</WechatAPI>
+					) : (
+						<div />
+					)}
+				</WechatAPIProvider>
+			);
+		};
+		const wrapper = mount(<App location="foo" />);
+		await delay(500);
+		wrapper.setProps({ location: 'bar' });
+		await delay(500);
+		expect(onSetShareData).toHaveBeenLastCalledWith(
+			{ foo: 'foo', bar: 'bar' },
 			['onMenuShareTimeline'],
 			wx,
 		);
