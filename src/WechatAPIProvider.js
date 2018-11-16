@@ -16,12 +16,14 @@ export default class WechatAPIProvider extends Component {
 		jsApiList: PropTypes.array,
 		shareData: PropTypes.object,
 		debug: PropTypes.bool,
+		undocumented_isWechat: PropTypes.bool,
 	};
 
 	static defaultProps = {
 		jsApiList: [],
 		shareData: {},
 		debug: false,
+		undocumented_isWechat: isWechat,
 	};
 
 	constructor(props) {
@@ -51,7 +53,7 @@ export default class WechatAPIProvider extends Component {
 
 	config = debounce(async (jsApiList, callback) => {
 		const {
-			props: { debug, wx, getConfig },
+			props: { debug, wx, getConfig, undocumented_isWechat },
 			wechatAPIContext: { emitter },
 		} = this;
 
@@ -60,7 +62,7 @@ export default class WechatAPIProvider extends Component {
 			if (typeof callback === 'function') callback();
 		};
 
-		if (!isWechat) {
+		if (!undocumented_isWechat) {
 			if (debug) {
 				this._updateShareApiList(jsApiList);
 				done();
@@ -116,6 +118,7 @@ export default class WechatAPIProvider extends Component {
 			debug,
 			getConfig,
 			wx,
+			undocumented_isWechat,
 			...other
 		} = this.props;
 		return (
