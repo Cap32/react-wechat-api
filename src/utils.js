@@ -2,7 +2,7 @@ const { userAgent } = window.navigator;
 
 export const isWechat = /micromessenger/i.test(userAgent);
 
-export function debounce(fn, delay = 0) {
+export function debounce(fn, delay) {
 	let t0;
 	let timeoutId;
 	const finalFn = (...args) => {
