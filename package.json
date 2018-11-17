@@ -1,6 +1,6 @@
 {
   "name": "react-wechat-api",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "React Wechat JSSDK component for SPA",
   "repository": "Cap32/react-wechat-api",
   "scripts": {
