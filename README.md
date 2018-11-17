@@ -5,7 +5,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/Cap32/react-wechat-api/badge.svg?branch=master)](https://coveralls.io/github/Cap32/react-wechat-api?branch=master)
 [![License](https://img.shields.io/badge/license-MIT_License-brightgreen.svg?style=flat)](https://github.com/Cap32/react-wechat-api/blob/master/LICENSE.md)
 
-[WIP] React Wechat JSSDK component for SPA
+React Wechat JSSDK component for SPA
 
 ## Installation
 

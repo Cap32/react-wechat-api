@@ -32,6 +32,13 @@
   "jsnext:main": "es/index.js",
   "author": "Cap32",
   "license": "MIT",
+  "keywords": [
+    "react",
+    "wechat",
+    "jssdk",
+    "share",
+    "wx"
+  ],
   "dependencies": {
     "create-react-context": "^0.2.3",
     "emit-lite": "^2.0.0",
