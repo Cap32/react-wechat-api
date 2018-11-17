@@ -5,6 +5,7 @@ import EventEmitter from 'emit-lite';
 import WechatAPIContext from './WechatAPIContext';
 import { isWechat, debounce } from './utils';
 
+/* istanbul ignore next */
 const Component = React.PureComponent || React.Component;
 
 export default class WechatAPIProvider extends Component {
@@ -46,6 +47,8 @@ export default class WechatAPIProvider extends Component {
 
 	componentDidUpdate(prevProps) {
 		const { location, jsApiList } = this.props;
+
+		/* istanbul ignore next */
 		if (prevProps.location !== location) this.config(jsApiList);
 	}
 
