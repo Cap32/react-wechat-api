@@ -30,6 +30,7 @@ describe('WechatAPIProvider', () => {
 		await delay(800);
 		expect(onGetConfigError).toHaveBeenCalledTimes(1);
 	});
+
 	test('should children work', () => {
 		const wx = createWx();
 		const wrapper = mount(
@@ -78,6 +79,41 @@ describe('WechatAPIProvider', () => {
 			['onMenuShareTimeline'],
 			wx,
 		);
+	});
+
+	test('should not emit `onSetJsApiList` if getConfig error', async () => {
+		const wx = createWx();
+		const onSetJsApiList = jest.fn();
+		shallow(
+			<WechatAPIProvider
+				wx={wx}
+				getConfig={() => Promise.reject(new Error())}
+				location="/"
+				onSetJsApiList={onSetJsApiList}
+				undocumented_isWechat
+			>
+				<div />
+			</WechatAPIProvider>,
+		);
+		await delay(800);
+		expect(onSetJsApiList).toHaveBeenCalledTimes(0);
+	});
+
+	test('should not emit `onSetJsApiList` if not wechat', async () => {
+		const wx = createWx();
+		const onSetJsApiList = jest.fn();
+		shallow(
+			<WechatAPIProvider
+				wx={wx}
+				getConfig={() => {}}
+				location="/"
+				onSetJsApiList={onSetJsApiList}
+			>
+				<div />
+			</WechatAPIProvider>,
+		);
+		await delay(800);
+		expect(onSetJsApiList).toHaveBeenCalledTimes(0);
 	});
 
 	test('should shareData work', async () => {
