@@ -116,6 +116,24 @@ describe('WechatAPIProvider', () => {
 		expect(onSetJsApiList).toHaveBeenCalledTimes(0);
 	});
 
+	test('should emit `onSetJsApiList` if debug is `true`', async () => {
+		const wx = createWx();
+		const onSetJsApiList = jest.fn();
+		shallow(
+			<WechatAPIProvider
+				wx={wx}
+				getConfig={() => {}}
+				location="/"
+				onSetJsApiList={onSetJsApiList}
+				debug
+			>
+				<div />
+			</WechatAPIProvider>,
+		);
+		await delay(800);
+		expect(onSetJsApiList).toHaveBeenCalledTimes(1);
+	});
+
 	test('should shareData work', async () => {
 		const wx = createWx();
 		shallow(

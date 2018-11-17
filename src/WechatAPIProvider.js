@@ -72,7 +72,8 @@ export default class WechatAPIProvider extends Component {
 			wechatAPIContext: { emitter },
 		} = this;
 
-		const done = () => {
+		const done = (apiList) => {
+			if (onSetJsApiList) onSetJsApiList(apiList, wx);
 			if (typeof callback === 'function') callback();
 			emitter.emit('ready', wx);
 		};
@@ -80,7 +81,7 @@ export default class WechatAPIProvider extends Component {
 		if (!undocumented_isWechat) {
 			if (debug) {
 				this._updateShareApiList(jsApiList);
-				done();
+				done(jsApiList);
 			}
 			return;
 		}
@@ -98,11 +99,8 @@ export default class WechatAPIProvider extends Component {
 					jsApiList: apiList,
 					...config,
 				});
-				wx.ready(done);
-				wx.error((err) => {
-					emitter.emit('error', err);
-				});
-				if (onSetJsApiList) onSetJsApiList(apiList, wx);
+				wx.ready(() => done(apiList));
+				wx.error((err) => emitter.emit('error', err));
 			})
 			.catch(onGetConfigError);
 	}, 200);
