@@ -8,5 +8,11 @@ language: node_js
 node_js:
   - "8"
 
+script:
+  - yarn test --coverage
+
+after_script:
+  - yarn coveralls
+
 notifications:
   email: false
