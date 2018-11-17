@@ -24,6 +24,8 @@ export default class WechatAPI extends PureComponent {
 
 	componentDidUpdate(prevProps) {
 		const { shareData, wechatAPI } = this.props;
+
+		/* istanbul ignore else */
 		if (prevProps.shareData !== shareData) {
 			wechatAPI.updateShareData(shareData);
 		}

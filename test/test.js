@@ -253,4 +253,34 @@ describe('WechatAPI', () => {
 			wx,
 		);
 	});
+
+	test('should update shareData', async () => {
+		const wx = createWx();
+		const onSetShareData = jest.fn();
+		const App = function App({ shareData }) {
+			return (
+				<WechatAPIProvider
+					wx={wx}
+					getConfig={() => {}}
+					location="/"
+					jsApiList={['onMenuShareTimeline']}
+					onSetShareData={onSetShareData}
+					undocumented_isWechat
+				>
+					<WechatAPI shareData={shareData}>
+						<div />
+					</WechatAPI>
+				</WechatAPIProvider>
+			);
+		};
+		const wrapper = mount(<App shareData={{ foo: 'foo', bar: 'bar' }} />);
+		await delay(800);
+		wrapper.setProps({ shareData: { foo: 'bar', baz: 'baz' } });
+		await delay(800);
+		expect(onSetShareData).toHaveBeenLastCalledWith(
+			{ foo: 'bar', baz: 'baz' },
+			['onMenuShareTimeline'],
+			wx,
+		);
+	});
 });
