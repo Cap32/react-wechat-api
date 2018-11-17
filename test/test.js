@@ -337,4 +337,29 @@ describe('WechatAPI', () => {
 			wx,
 		);
 	});
+
+	test('should shareData function type work', async () => {
+		const wx = createWx();
+		const onSetShareData = jest.fn();
+		mount(
+			<WechatAPIProvider
+				wx={wx}
+				getConfig={() => {}}
+				location="/"
+				jsApiList={['onMenuShareTimeline']}
+				onSetShareData={onSetShareData}
+				undocumented_isWechat
+			>
+				<WechatAPI shareData={{ foo: () => 'baz' }}>
+					<div />
+				</WechatAPI>
+			</WechatAPIProvider>,
+		);
+		await delay(800);
+		expect(onSetShareData).toHaveBeenLastCalledWith(
+			{ foo: 'baz' },
+			['onMenuShareTimeline'],
+			wx,
+		);
+	});
 });
