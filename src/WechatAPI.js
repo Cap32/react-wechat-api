@@ -46,7 +46,7 @@ export default class WechatAPI extends PureComponent {
 
 	handleError = (error) => {
 		const { onError } = this.props;
-		if (onError) onError(error);
+		onError && onError(error);
 	};
 
 	render() {

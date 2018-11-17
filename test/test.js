@@ -145,6 +145,30 @@ describe('WechatAPI', () => {
 		expect(onReady).toHaveBeenLastCalledWith(wx);
 	});
 
+	test('should onError work', async () => {
+		const err = new Error();
+		const wx = createWx({
+			ready: () => {},
+			error: (cb) => cb(err),
+		});
+		const onError = jest.fn();
+		mount(
+			<WechatAPIProvider
+				wx={wx}
+				getConfig={() => {}}
+				location="/"
+				undocumented_isWechat
+			>
+				<WechatAPI onError={onError}>
+					<div />
+				</WechatAPI>
+			</WechatAPIProvider>,
+		);
+		await delay(800);
+		expect(onError).toHaveBeenCalledTimes(1);
+		expect(onError).toHaveBeenLastCalledWith(err);
+	});
+
 	test('should jsApiList work', async () => {
 		const wx = createWx();
 		const onSetJsApiList = jest.fn();
