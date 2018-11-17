@@ -1,5 +1,6 @@
 # react-wechat-api
 
+[![CircleCI](https://circleci.com/gh/Cap32/react-wechat-api.svg?style=shield)](https://circleci.com/gh/Cap32/react-wechat-api)
 [![Build Status](https://travis-ci.org/Cap32/react-wechat-api.svg?branch=master)](https://travis-ci.org/Cap32/react-wechat-api)
 [![Coverage Status](https://coveralls.io/repos/github/Cap32/react-wechat-api/badge.svg?branch=master)](https://coveralls.io/github/Cap32/react-wechat-api?branch=master)
 [![License](https://img.shields.io/badge/license-MIT_License-brightgreen.svg?style=flat)](https://github.com/Cap32/react-wechat-api/blob/master/LICENSE.md)
