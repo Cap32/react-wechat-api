@@ -15,13 +15,13 @@ $ yarn add react-wechat-api
 
 ## Usage
 
-##### Example with react-router v4
+**This example is using react-router v4, but it's not required by reacth-wechat-api**
 
 **Wechat.js**
 
 ```jsx
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { Route } from "react-router-dom";
 import { WechatAPIProvider } from "recat-wechat-api";
 import wx from "weixin-js-sdk";
 
@@ -37,7 +37,7 @@ const getConfig = ({ url }) =>
 const defaultShareData = {
   title: "Wechat API",
   desc: "Wechat API component for react",
-  link: () => window.location.href,
+  link: () => window.location.href, // will return latest URL dynamically
   imgUrl: `${window.location.origin}/icon.png`
 };
 
@@ -48,17 +48,22 @@ const defaultJsApiList = [
   "onMenuShareQZone"
 ];
 
-export default withRouter(function Wechat(props) {
+export default function Wechat(props) {
   return (
-    <WechatAPIProvider
-      wx={wx}
-      getConfig={getConfig}
-      jsApiList={defaultJsApiList}
-      shareData={defaultShareData}
-      {...props}
-    />
+    <Route>
+      {({ location }) => (
+        <WechatAPIProvider
+          {...props}
+          location={location} // <-- `location` is required
+          wx={wx} // <-- `wx` is required
+          getConfig={getConfig}
+          jsApiList={defaultJsApiList}
+          shareData={defaultShareData}
+        />
+      )}
+    </Route>
   );
-});
+}
 ```
 
 **App.js**
