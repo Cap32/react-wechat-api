@@ -32,12 +32,9 @@ export default class WechatAPI extends PureComponent {
 	}
 
 	componentWillUnmount() {
-		const { wechatAPI, shareData } = this.props;
+		const { wechatAPI } = this.props;
 		wechatAPI.emitter.off('ready', this.handleReady);
 		wechatAPI.emitter.off('error', this.handleError);
-
-		/* istanbul ignore else */
-		if (shareData) wechatAPI.resetShareData();
 	}
 
 	handleReady = (wx) => {

@@ -38,7 +38,6 @@ export default class WechatAPIProvider extends Component {
 		this.wechatAPIContext = {
 			config: this.config,
 			updateShareData: this.updateShareData,
-			resetShareData: this.resetShareData,
 			emitter: new EventEmitter(),
 		};
 		this.shareApiList = [];
@@ -49,7 +48,9 @@ export default class WechatAPIProvider extends Component {
 		const { location, jsApiList } = this.props;
 
 		/* istanbul ignore next */
-		if (prevProps.location !== location) this.config(jsApiList);
+		if (prevProps.location !== location) {
+			this.config(jsApiList, this.updateShareData);
+		}
 	}
 
 	init() {
@@ -119,10 +120,6 @@ export default class WechatAPIProvider extends Component {
 		this.shareApiList.forEach((shareType) => wx[shareType](data));
 		if (onSetShareData) onSetShareData(data, this.shareApiList, wx);
 	}, 200);
-
-	resetShareData = () => {
-		this.updateShareData();
-	};
 
 	render() {
 		const {

@@ -362,4 +362,78 @@ describe('WechatAPI', () => {
 			wx,
 		);
 	});
+
+	test('should update shareData when location changed', async () => {
+		const wx = createWx();
+		const onSetShareData = jest.fn();
+		const App = ({ location }) => (
+			<WechatAPIProvider
+				wx={wx}
+				getConfig={() => {}}
+				location={location}
+				jsApiList={['onMenuShareTimeline']}
+				shareData={{ link: () => location }}
+				onSetShareData={onSetShareData}
+				undocumented_isWechat
+			>
+				<div />
+			</WechatAPIProvider>
+		);
+		const warpper = mount(<App location="/foo" />);
+		await delay(800);
+		expect(onSetShareData).toHaveBeenLastCalledWith(
+			{ link: '/foo' },
+			['onMenuShareTimeline'],
+			wx,
+		);
+		warpper.setProps({ location: '/bar' });
+		await delay(800);
+		expect(onSetShareData).toHaveBeenLastCalledWith(
+			{ link: '/bar' },
+			['onMenuShareTimeline'],
+			wx,
+		);
+	});
+
+	test('should update shareData over WechatAPI component when location changed', async () => {
+		const wx = createWx();
+		const onSetShareData = jest.fn();
+		const PageFoo = () => (
+			<WechatAPI>
+				<div />
+			</WechatAPI>
+		);
+		const PageBar = () => (
+			<WechatAPI shareData={{ link: '/baz' }}>
+				<div />
+			</WechatAPI>
+		);
+		const App = ({ location }) => (
+			<WechatAPIProvider
+				wx={wx}
+				getConfig={() => {}}
+				location={location}
+				jsApiList={['onMenuShareTimeline']}
+				shareData={{ link: () => location }}
+				onSetShareData={onSetShareData}
+				undocumented_isWechat
+			>
+				{location === '/foo' ? <PageFoo /> : <PageBar />}
+			</WechatAPIProvider>
+		);
+		const warpper = mount(<App location="/foo" />);
+		await delay(800);
+		expect(onSetShareData).toHaveBeenLastCalledWith(
+			{ link: '/foo' },
+			['onMenuShareTimeline'],
+			wx,
+		);
+		warpper.setProps({ location: '/bar' });
+		await delay(800);
+		expect(onSetShareData).toHaveBeenLastCalledWith(
+			{ link: '/baz' },
+			['onMenuShareTimeline'],
+			wx,
+		);
+	});
 });
