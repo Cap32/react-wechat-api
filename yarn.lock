@@ -8591,6 +8591,10 @@ timers-browserify@^2.0.4:
   dependencies:
     setimmediate "^1.0.4"
 
+tiny-invariant@^1.0.3:
+  version "1.0.3"
+  resolved "http://registry.npm.taobao.org/tiny-invariant/download/tiny-invariant-1.0.3.tgz#91efaaa0269ccb6271f0296aeedb05fc3e067b7a"
+
 tmp@^0.0.29:
   version "0.0.29"
   resolved "http://registry.npm.taobao.org/tmp/download/tmp-0.0.29.tgz#f25125ff0dd9da3ccb0c2dd371ee1288bb9128c0"

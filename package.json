@@ -42,7 +42,8 @@
   "dependencies": {
     "create-react-context": "^0.2.3",
     "emit-lite": "^2.0.0",
-    "prop-types": "^15.5.7"
+    "prop-types": "^15.5.7",
+    "tiny-invariant": "^1.0.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
