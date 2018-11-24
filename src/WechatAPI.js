@@ -1,29 +1,19 @@
-import { PureComponent, Children } from 'react';
+import React, { PureComponent, Children } from 'react';
 import PropTypes from 'prop-types';
-import withWechatAPI from './withWechatAPI';
+import WechatAPIContext from './WechatAPIContext';
+import invariant from 'tiny-invariant';
 
-@withWechatAPI
 export default class WechatAPI extends PureComponent {
 	static propTypes = {
 		children: PropTypes.node.isRequired,
 		jsApiList: PropTypes.array,
 		shareData: PropTypes.object,
-		wechatAPI: PropTypes.object.isRequired,
 		onReady: PropTypes.func,
 		onError: PropTypes.func,
 	};
 
-	constructor(props) {
-		super(props);
-
-		const { wechatAPI, jsApiList } = props;
-		wechatAPI.emitter.on('ready', this.handleReady);
-		wechatAPI.emitter.on('error', this.handleError);
-		if (jsApiList) wechatAPI.config(jsApiList);
-	}
-
 	componentDidUpdate(prevProps) {
-		const { shareData, wechatAPI } = this.props;
+		const { props: { shareData }, wechatAPI } = this;
 
 		/* istanbul ignore else */
 		if (prevProps.shareData !== shareData) {
@@ -32,15 +22,23 @@ export default class WechatAPI extends PureComponent {
 	}
 
 	componentWillUnmount() {
-		const { wechatAPI } = this.props;
+		const { wechatAPI } = this;
 		wechatAPI.emitter.off('ready', this.handleReady);
 		wechatAPI.emitter.off('error', this.handleError);
 	}
 
+	setup(wechatAPI) {
+		const { jsApiList } = this.props;
+		this.wechatAPI = wechatAPI;
+		wechatAPI.emitter.on('ready', this.handleReady);
+		wechatAPI.emitter.on('error', this.handleError);
+		if (jsApiList) wechatAPI.config(jsApiList);
+	}
+
 	handleReady = (wx) => {
-		const { onReady, wechatAPI, shareData } = this.props;
+		const { onReady, shareData } = this.props;
 		if (onReady) onReady(wx);
-		if (shareData) wechatAPI.updateShareData(shareData);
+		if (shareData) this.wechatAPI.updateShareData(shareData);
 	};
 
 	handleError = (error) => {
@@ -48,7 +46,20 @@ export default class WechatAPI extends PureComponent {
 		onError && onError(error);
 	};
 
-	render() {
+	renderChildren = (wechatAPI) => {
+		invariant(
+			wechatAPI,
+			'You should not use <AppTitle> outside <WechatAPIProvider>',
+		);
+		if (!this.wechatAPI) this.setup(wechatAPI);
 		return Children.only(this.props.children);
+	};
+
+	render() {
+		return (
+			<WechatAPIContext.Consumer>
+				{this.renderChildren}
+			</WechatAPIContext.Consumer>
+		);
 	}
 }
