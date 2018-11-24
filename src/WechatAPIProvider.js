@@ -3,10 +3,7 @@ import PropTypes from 'prop-types';
 import { shareApiList } from './constants';
 import EventEmitter from 'emit-lite';
 import WechatAPIContext from './WechatAPIContext';
-import { isWechat, debounce } from './utils';
-
-/* istanbul ignore next */
-const Component = React.PureComponent || React.Component;
+import { isWechat, debounce, Component } from './utils';
 
 export default class WechatAPIProvider extends Component {
 	static propTypes = {

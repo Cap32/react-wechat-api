@@ -1,9 +1,10 @@
-import React, { PureComponent, Children } from 'react';
+import React, { Children } from 'react';
 import PropTypes from 'prop-types';
 import WechatAPIContext from './WechatAPIContext';
 import invariant from 'tiny-invariant';
+import { Component } from './utils';
 
-export default class WechatAPI extends PureComponent {
+export default class WechatAPI extends Component {
 	static propTypes = {
 		children: PropTypes.node.isRequired,
 		jsApiList: PropTypes.array,

@@ -1,3 +1,5 @@
+import React from 'react';
+
 const { userAgent } = window.navigator;
 
 export const isWechat = /micromessenger/i.test(userAgent);
@@ -19,3 +21,5 @@ export function debounce(fn, delay) {
 	};
 	return finalFn;
 }
+
+export const Component = React.PureComponent || React.Component;
